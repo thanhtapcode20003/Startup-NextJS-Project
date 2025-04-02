@@ -1,5 +1,7 @@
 import SearchForm from "@/components/SearchForm";
-import StartupCard from "@/components/StartupCard";
+import StartupCard, { StartupTypeCard } from "@/components/StartupCard";
+import { client } from "@/sanity/lib/client";
+import { STARTUP_QUERY } from "@/sanity/lib/quries";
 
 export default async function Home({
 	searchParams,
@@ -8,30 +10,33 @@ export default async function Home({
 }) {
 	const query = (await searchParams).query;
 
-	const posts = [
-		{
-			_createdAt: new Date("2025-04-01"),
-			views: 55,
-			author: { _id: 1, name: "John Doe" },
-			_id: 1,
-			description: "This is a description",
-			image:
-				"https://images.unsplash.com/photo-1634912314704-c646c586b131?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0",
-			category: "Robots",
-			title: "We Robots",
-		},
-		{
-			_createdAt: new Date("2025-04-01"),
-			views: 30,
-			author: { _id: 2, name: "Elon " },
-			_id: 2,
-			description: "A startup by Elon ",
-			image:
-				"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0",
-			category: "Tech",
-			title: "Elon s Tech Venture",
-		},
-	];
+	const posts = await client.fetch(STARTUP_QUERY);
+
+	// console.log(JSON.stringify(posts, null, 2));
+
+	// 	{
+	// 		_createdAt: new Date(),
+	// 		views: 55,
+	// 		author: { _id: 1, name: "John Doe" },
+	// 		_id: 1,
+	// 		description: "This is a description",
+	// 		image:
+	// 			"https://images.unsplash.com/photo-1634912314704-c646c586b131?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0",
+	// 		category: "Robots",
+	// 		title: "We Robots",
+	// 	},
+	// 	{
+	// 		_createdAt: new Date(),
+	// 		views: 30,
+	// 		author: { _id: 2, name: "Elon " },
+	// 		_id: 2,
+	// 		description: "A startup by Elon ",
+	// 		image:
+	// 			"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0",
+	// 		category: "Tech",
+	// 		title: "Elon s Tech Venture",
+	// 	},
+	// ];
 
 	return (
 		<>
@@ -53,7 +58,7 @@ export default async function Home({
 				</p>
 				<ul className="mt-7 card_grid">
 					{posts.length > 0 ? (
-						posts.map((post: StartupCardType) => (
+						posts.map((post: StartupTypeCard) => (
 							<StartupCard key={post._id} post={post} />
 						))
 					) : (
