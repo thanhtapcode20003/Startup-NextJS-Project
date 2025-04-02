@@ -1,4 +1,38 @@
-export default function Home() {
+import SearchForm from "@/components/SearchForm";
+import StartupCard from "@/components/StartupCard";
+
+export default async function Home({
+	searchParams,
+}: {
+	searchParams: Promise<{ query?: string }>;
+}) {
+	const query = (await searchParams).query;
+
+	const posts = [
+		{
+			_createdAt: new Date("2025-04-01"),
+			views: 55,
+			author: { _id: 1, name: "John Doe" },
+			_id: 1,
+			description: "This is a description",
+			image:
+				"https://images.unsplash.com/photo-1634912314704-c646c586b131?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0",
+			category: "Robots",
+			title: "We Robots",
+		},
+		{
+			_createdAt: new Date("2025-04-01"),
+			views: 30,
+			author: { _id: 2, name: "Elon " },
+			_id: 2,
+			description: "A startup by Elon ",
+			image:
+				"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0",
+			category: "Tech",
+			title: "Elon s Tech Venture",
+		},
+	];
+
 	return (
 		<>
 			<section className="pink_container pattern">
@@ -10,6 +44,22 @@ export default function Home() {
 					Submit Ideas, Vote on Pitches, and Get Noticed in Virtual
 					Competitions.
 				</p>
+				<SearchForm query={query} />
+			</section>
+
+			<section className="section_container">
+				<p className="text-30-semibold">
+					{query ? `Search results for "${query}"` : "All Startups"}
+				</p>
+				<ul className="mt-7 card_grid">
+					{posts.length > 0 ? (
+						posts.map((post: StartupCardType) => (
+							<StartupCard key={post._id} post={post} />
+						))
+					) : (
+						<p className="no-results">No results found</p>
+					)}
+				</ul>
 			</section>
 		</>
 	);
